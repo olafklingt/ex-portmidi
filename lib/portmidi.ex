@@ -36,9 +36,9 @@ defmodule PortMidi do
     If Portmidi can't open the device, a tuple `{:error, reason}` is returned.
     Check `src/portmidi_shared.c#makePmErrorAtom` for all possible errors.
   """
-  @spec open(:input, <<>>) :: {:ok, pid()} | {:error, atom()}
+  @spec open(:input, binary()) :: {:ok, pid()} | {:error, atom()}
   def open(:input, device_name) do
-    Input.start_link device_name
+    Input.start_link(device_name)
   end
 
   @doc """
@@ -50,7 +50,7 @@ defmodule PortMidi do
     If Portmidi can't open the device, a tuple `{:error, reason}` is returned.
     Check `src/portmidi_shared.c#makePmErrorAtom` for all possible errors.
   """
-  @spec open(:output, <<>>, non_neg_integer()) :: {:ok, pid()} | {:error, atom()}
+  @spec open(:output, binary(), non_neg_integer()) :: {:ok, pid()} | {:error, atom()}
   def open(:output, device_name, latency \\ 0) do
     Output.start_link(device_name, latency)
   end
@@ -63,7 +63,7 @@ defmodule PortMidi do
   """
   @spec close(atom, pid()) :: :ok
   def close(device_type, device)
-  def close(:input, input),   do: Input.stop(input)
+  def close(:input, input), do: Input.stop(input)
   def close(:output, output), do: Input.stop(output)
 
   @doc """
@@ -72,8 +72,7 @@ defmodule PortMidi do
     events in its mailbox as soon as they are emitted from the device.
   """
   @spec listen(pid(), pid()) :: :ok
-  def listen(input, pid), do:
-    Input.listen(input, pid)
+  def listen(input, pid), do: Input.listen(input, pid)
 
   @doc """
     Writes a MIDI event to the given `output` device. `message` can be a tuple
@@ -86,13 +85,12 @@ defmodule PortMidi do
   @spec write(pid(), message) :: :ok
   @spec write(pid(), {message, timestamp}) :: :ok
   @spec write(pid(), [{message, timestamp}, ...]) :: :ok
-  def write(output, message), do:
-    Output.write(output, message)
+  def write(output, message), do: Output.write(output, message)
 
   @doc """
     Returns a map with input and output devices, in the form of
     `PortMidi.Device` structs
   """
   @spec devices() :: %{input: [%PortMidi.Device{}, ...], output: [%PortMidi.Device{}, ...]}
-  def devices, do: Devices.list
+  def devices, do: Devices.list()
 end

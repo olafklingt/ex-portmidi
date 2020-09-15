@@ -37,5 +37,5 @@ defmodule PortMidi.Input.Server do
     {:noreply, reader}
   end
 
-
+  def terminate(_reason, reader), do: reader |> Reader.stop()
 end

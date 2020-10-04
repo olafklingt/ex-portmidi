@@ -36,7 +36,7 @@ defmodule PortMidi do
     If Portmidi can't open the device, a tuple `{:error, reason}` is returned.
     Check `src/portmidi_shared.c#makePmErrorAtom` for all possible errors.
   """
-  @spec open(:input, binary()) :: {:ok, pid()} | {:error, atom()}
+  @spec open(:input | :output, binary()) :: {:ok, pid()} | {:error, atom()}
   def open(:input, device_name) do
     Input.start_link(device_name)
   end
@@ -50,8 +50,12 @@ defmodule PortMidi do
     If Portmidi can't open the device, a tuple `{:error, reason}` is returned.
     Check `src/portmidi_shared.c#makePmErrorAtom` for all possible errors.
   """
+  def open(:output, device_name) do
+    Output.start_link(device_name, 0)
+  end
+
   @spec open(:output, binary(), non_neg_integer()) :: {:ok, pid()} | {:error, atom()}
-  def open(:output, device_name, latency \\ 0) do
+  def open(:output, device_name, latency) do
     Output.start_link(device_name, latency)
   end
 

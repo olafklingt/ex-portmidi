@@ -23,7 +23,7 @@ defmodule PortMidi.Input.Reader do
   # Agent implementation
   ######################
   defp start(server, device_name) do
-    case device_name |> String.to_char_list() |> do_open do
+    case device_name |> String.to_charlist() |> do_open! do
       {:ok, stream} -> {server, stream}
       {:error, reason} -> exit(reason)
     end
@@ -35,13 +35,13 @@ defmodule PortMidi.Input.Reader do
   end
 
   defp loop(server, stream) do
-    if do_poll(stream) == :read, do: read_and_send(server, stream)
+    if do_poll!(stream) == :read, do: read_and_send(server, stream)
     :timer.sleep(@input_poll_sleep)
     loop(server, stream)
   end
 
   defp read_and_send(server, stream) do
-    case do_read(stream, @buffer_size) do
+    case do_read!(stream, @buffer_size) do
       {:error, reason} -> Logger.debug("Error Reading Midi: #{reason}")
       messages -> Server.new_messages(server, messages)
     end
@@ -49,6 +49,6 @@ defmodule PortMidi.Input.Reader do
 
   defp do_stop({_server, stream, task}) do
     task |> Task.shutdown()
-    stream |> do_close
+    stream |> do_close!
   end
 end

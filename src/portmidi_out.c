@@ -113,9 +113,9 @@ static ERL_NIF_TERM do_close(ErlNifEnv* env, int arc, const ERL_NIF_TERM argv[])
 }
 
 static ErlNifFunc nif_funcs[] = {
-  {"do_open",  2, do_open},
-  {"do_write", 2, do_write},
-  {"do_close", 1, do_close}
+  {"do_open!",  2, do_open},
+  {"do_write!", 2, do_write},
+  {"do_close!", 1, do_close}
 };
 
 ERL_NIF_INIT(Elixir.PortMidi.Nifs.Output,nif_funcs,load,NULL,NULL,NULL)

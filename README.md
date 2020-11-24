@@ -1,5 +1,8 @@
 # ex-portmidi
 
+I picked up the version of @Kovak and deal with some dialyzer warnings.
+The rest is left the same.
+
 **Need to catch up?** Have a look at the [changelog](/CHANGELOG.md)! 🚀
 
 ex-portmidi is a wrapper for the [PortMidi C library](http://portmedia.sourceforge.net/portmidi/),
@@ -11,7 +14,9 @@ Add portmidi to your list of dependencies in `mix.exs`, and ensure
 that `portmidi` is started before your application:
 ```
 def deps do
-  [{:portmidi, "~> 5.0"}]
+  [
+    {:portmidi, git: "https://github.com/olafklingt/portmidi"}
+  ]
 end
 
 def application do

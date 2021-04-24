@@ -35,13 +35,8 @@ defmodule PortMidi do
 
     If Portmidi can't open the device, a tuple `{:error, reason}` is returned.
     Check `src/portmidi_shared.c#makePmErrorAtom` for all possible errors.
-  """
-  @spec open(:input | :output, binary()) :: {:ok, pid()} | {:error, atom()}
-  def open(:input, device_name) do
-    Input.start_link(device_name)
-  end
 
-  @doc """
+
     Opens a connection to the output device with name `device_name`.
 
     Returns the `pid` to the corresponding GenServer. Use this `pid` to call
@@ -50,6 +45,11 @@ defmodule PortMidi do
     If Portmidi can't open the device, a tuple `{:error, reason}` is returned.
     Check `src/portmidi_shared.c#makePmErrorAtom` for all possible errors.
   """
+  @spec open(:input | :output, binary()) :: {:ok, pid()} | {:error, atom()}
+  def open(:input, device_name) do
+    Input.start_link(device_name)
+  end
+
   def open(:output, device_name) do
     Output.start_link(device_name, 0)
   end
